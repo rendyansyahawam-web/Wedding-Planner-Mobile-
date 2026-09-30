@@ -12,7 +12,7 @@
 .header-top{display:flex;justify-content:space-between;align-items:center}.header small{opacity:.8}.header h1{font-size:26px;margin-top:3px}.icon{width:40px;height:40px;border-radius:13px;background:#ffffff22;color:#fff}
 .countdown{margin-top:16px;background:#ffffff1c;border:1px solid #ffffff18;border-radius:18px;padding:13px}.count-title{font-size:10px;opacity:.8}.count-date{font-size:18px;font-weight:800;margin:4px 0 10px}.count-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.count-box{background:#ffffff20;border-radius:11px;text-align:center;padding:7px 2px}.count-box b{font-size:17px;display:block}.count-box span{font-size:8px;opacity:.75}
 .container{max-width:760px;margin:auto;padding:16px}.section{margin-bottom:20px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.section-head h2{font-size:17px}.section-head button,.link-btn{background:none;color:var(--p);font-size:11px;font-weight:800}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.card,.stat,.menu{background:var(--white);border:1px solid var(--line);border-radius:18px;box-shadow:0 7px 22px #56377812}.stat{padding:13px}.stat-icon{width:36px;height:36px;background:var(--pl);border-radius:11px;display:grid;place-items:center;margin-bottom:8px}.stat small{font-size:10px;color:var(--muted)}.stat strong{display:block;font-size:16px;margin-top:3px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.card,.stat,.menu{background:var(--white);border:1px solid var(--line);border-radius:18px;box-shadow:0 7px 22px #56377812}.stat{padding:13px;position:relative}.stat.editable{cursor:pointer}.stat.editable:active{transform:scale(.99)}.stat-edit{position:absolute;right:11px;top:11px;width:28px;height:28px;border-radius:9px;background:var(--pl);color:var(--p);display:grid;place-items:center;font-size:13px}.stat-icon{width:36px;height:36px;background:var(--pl);border-radius:11px;display:grid;place-items:center;margin-bottom:8px}.stat small{font-size:10px;color:var(--muted)}.stat strong{display:block;font-size:16px;margin-top:3px}
 .progress{height:8px;background:#eee9f1;border-radius:99px;overflow:hidden}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--p),#ad82d5);border-radius:99px;transition:.25s}.progress-row{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:7px}
 .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.menu{padding:10px 3px;text-align:center}.menu .mi{width:38px;height:38px;border-radius:12px;background:var(--pl);display:grid;place-items:center;margin:auto;font-size:19px}.menu span{font-size:9px;display:block;margin-top:6px}
 .card{padding:14px}.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0ecf2}.row:last-child{border-bottom:0}.grow{flex:1;min-width:0}.row b{font-size:12px}.row small{display:block;font-size:10px;color:var(--muted);margin-top:3px}.badge{font-size:8px;font-weight:800;padding:5px 7px;border-radius:8px;white-space:nowrap}.pending{background:#fff1dc;color:#b7751e}.done{background:#e8f7ed;color:#38844e}.danger{background:#fdecee;color:#b93f4e}.actions{display:flex;gap:5px}.mini{width:30px;height:30px;border-radius:9px;background:#f3eff5;color:var(--p);font-size:13px}.mini.del{color:var(--red)}
@@ -28,15 +28,6 @@
 .hidden{display:none!important}
 @media(min-width:700px){.header{padding-left:calc((100% - 724px)/2 + 18px);padding-right:calc((100% - 724px)/2 + 18px)}.nav{max-width:760px;left:50%;right:auto;width:100%;transform:translateX(-50%)}.modal{align-items:center}.sheet{border-radius:22px;margin:auto}}
 </style>
-
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#7b5aa6">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Wedding Planner">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-
 </head>
 <body>
 <header class="header">
@@ -50,8 +41,8 @@
   <section class="section" id="home">
     <div class="section-head"><h2>Ringkasan Wedding</h2><button onclick="openModal('expense')">+ Pengeluaran</button></div>
     <div class="stats">
-      <div class="stat"><div class="stat-icon">💰</div><small>Total Budget</small><strong id="sumBudget">Rp 0</strong></div>
-      <div class="stat"><div class="stat-icon">💳</div><small>Sudah Dibayar</small><strong id="sumPaid">Rp 0</strong></div>
+      <button class="stat editable" type="button" onclick="openModal('totalBudget')" aria-label="Edit Total Budget"><div class="stat-icon">💰</div><small>Total Budget</small><strong id="sumBudget">Rp 0</strong><span class="stat-edit">✎</span></button>
+      <div class="stat"><div class="stat-icon">💳</div><small>Sudah Dibayar (Pengeluaran)</small><strong id="sumPaid">Rp 0</strong></div>
       <div class="stat"><div class="stat-icon">👥</div><small>Total Tamu</small><strong id="sumGuests">0</strong></div>
       <div class="stat"><div class="stat-icon">✅</div><small>Progress</small><strong id="sumProgress">0%</strong></div>
     </div>
@@ -99,7 +90,7 @@
 const KEY='wedding_planner_gal_niram_v3';
 const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const defaultData={
- settings:{couple:'Gal & Niram 💍',date:'2027-12-27'},
+ settings:{couple:'Gal & Niram 💍',date:'2027-12-27',totalBudget:36800000},
  savings:[
   {month:'Januari 2027',gal:0,niram:0,status:'NOT YET'},
   {month:'Februari 2027',gal:0,niram:0,status:'NOT YET'},
@@ -188,172 +179,4 @@ const defaultData={
   {group:'Pakaian',item:'Bra',done:false,estimate:0,final:0,store:'',link:'',note:''},
   {group:'Pakaian',item:'Dress',done:false,estimate:0,final:0,store:'',link:'',note:''},
   {group:'Pakaian',item:'Hijab',done:false,estimate:0,final:0,store:'',link:'',note:''},
-  {group:'Tas, Sepatu, Jam Tangan',item:'Tas',done:false,estimate:0,final:0,store:'ENJI',link:'',note:'SASSI BAG WARNA LATTE'},
-  {group:'Tas, Sepatu, Jam Tangan',item:'Sepatu Kets',done:false,estimate:0,final:0,store:'',link:'',note:''}
- ],
- cicil:[
-  {month:'Mei',item:'mukena, sajadah',budget:600000,paid:515715},
-  {month:'Juni',item:'Handuk, Alquran, hijab motif',budget:600000,paid:571691},
-  {month:'Juli',item:'Bed Cover, Dress',budget:600000,paid:0},
-  {month:'Agustus',item:'Tas, Heels',budget:600000,paid:0},
-  {month:'September',item:'Make up, Baju, Pakaian',budget:600000,paid:0},
-  {month:'Oktober',item:'Alat Mandi + Bodycare',budget:600000,paid:0},
-  {month:'November',item:'Skincare dan jam',budget:700000,paid:0}
- ],
- prewedding:{
-  items:[
-   {name:'Pendaftaran KUA',status:'Belum',price:600000},
-   {name:'Surat pengantar nikah',status:'Belum',price:20000},
-   {name:'FC Kartu Keluarga',status:'Belum',price:10000},
-   {name:'FC KTP',status:'Belum',price:10000},
-   {name:'FC akta',status:'Belum',price:10000},
-   {name:'FC KTP Orang Tua',status:'Belum',price:10000}
-  ],
-  mahar:[
-   {name:'Logam Mulia',price:6000000,status:'NOT YET'},
-   {name:'Cincin Nikah',price:2000000,status:'NOT YET'},
-   {name:'Seserahan',price:2000000,status:'NOT YET'},
-   {name:'Mas Kahwin',price:250000,status:'NOT YET'}
-  ],
-  photo:[
-   {name:'MUA',price:1000000,status:'NOT YET'},
-   {name:'Fotografer',price:1000000,status:'NOT YET'},
-   {name:'Venue',price:0,status:'NOT YET'},
-   {name:'Attire',price:2000000,status:'NOT YET'}
-  ]
- },
- theday:[
-  {section:'AKAD',name:'Venue',price:5000000,store:'Masjid Besar Ulul Azmi'},
-  {section:'AKAD',name:'Decor',price:1000000,store:'mvs_concept_decoration'},
-  {section:'AKAD',name:'MUA',price:1000000,store:'elina_hajjah'},
-  {section:'AKAD',name:'Hantaran',price:5000000,store:'pinang_hantaran'},
-  {section:'AKAD',name:'MC',price:500000,store:'hannanyah...'},
-  {section:'AKAD',name:'Pemantun',price:100000,store:'hangkad_kato...'},
-  {section:'AKAD',name:'Photo & Video',price:2000000,store:'siguerphotography'},
-  {section:'AKAD',name:'Henna',price:250000,store:'liskhen...'},
-  {section:'AKAD',name:"MUA mom's",price:500000,store:'emikmakeup...'},
-  {section:'AKAD',name:'WCC',price:600000,store:'kantin...'},
-  {section:'AKAD',name:'Catering',price:10000000,store:'DAcatering...'},
-  {section:'AKAD',name:'Undangan Cetak',price:0,store:''},
-  {section:'AKAD',name:'Undangan Online',price:0,store:''},
-  {section:'AKAD',name:'Photobooth',price:1500000,store:'KITA hotel'},
-  {section:'AKAD',name:'Penginapan',price:1500000,store:'sepitu kuku'},
-  {section:'AKAD',name:'Welcome Sign',price:300000,store:'mopak, pakcik'},
-  {section:'AKAD',name:'Tiket PP',price:500000,store:''},
-  {section:'AKAD',name:'Kendaraan',price:2000000,store:'2 mobil + driver 2 hari'}
- ],
- after:[
-  {name:'Honeymoon',price:0},
-  {name:'Tiket',price:0},
-  {name:'Akomodasi',price:0},
-  {name:'Lainnya',price:0}
- ],
- contacts:{
-  main:['Venue','Catering','Wedding Organizer','Photography','MUA','Attire','Hand Bouquet','Decoration','Entertainment','MC','Undangan','etc'],
-  backup:['Venue','Catering','Wedding Organizer','Photography','MUA','Attire','Hand Bouquet','Decoration','Entertainment','MC','Undangan','etc']
- }
-};
-let db=load();
-function clone(x){return JSON.parse(JSON.stringify(x))}
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));return x?merge(clone(defaultData),x):clone(defaultData)}catch(e){return clone(defaultData)}}
-function merge(base,src){if(!src||typeof src!=='object')return base;for(const k in src){if(src[k]&&typeof src[k]==='object'&&!Array.isArray(src[k])&&base[k])base[k]=merge(base[k],src[k]);else base[k]=src[k]}return base}
-function save(msg='Tersimpan otomatis'){localStorage.setItem(KEY,JSON.stringify(db));document.getElementById('autosaveBadge').textContent='TERSIMPAN';toast(msg);setTimeout(()=>document.getElementById('autosaveBadge').textContent='AUTO-SAVE',900)}
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1200)}
-const rup=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-function id(){return Date.now()+Math.random().toString(16).slice(2)}
-
-function renderHome(){
- document.getElementById('coupleName').textContent=db.settings.couple;
- const d=new Date(db.settings.date+'T00:00:00');document.getElementById('weddingDateText').textContent=d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
- const budget=totalBudget(),paid=totalPaid(),guest=db.guests.reduce((a,x)=>a+Number(x.qty||0),0),prog=calcProgress();
- sumBudget.textContent=rup(budget);sumPaid.textContent=rup(paid);sumGuests.textContent=guest;sumProgress.textContent=prog+'%';mainProgress.style.width=prog+'%';progressLabel.textContent=prog+'%';
- timelinePreview.innerHTML=db.timeline.slice(0,4).map(t=>`<div class="tl"><b>${esc(t.month)}</b><strong>${esc(t.title)}</strong><small>${esc(t.detail)}</small></div>`).join('');
- vendorPreview.innerHTML=db.vendorPayments.slice(0,5).map((v,i)=>`<div class="row"><div class="grow"><b>${esc(v.name)}</b><small>Tagihan ${rup(v.bill)} · Sisa ${rup(Math.max(0,v.bill-(v.paid||0)))}</small></div><span class="badge ${v.status==='DONE'?'done':'pending'}">${esc(v.status)}</span></div>`).join('')||'<div class="empty">Belum ada vendor.</div>';
- taskList.innerHTML=db.tasks.map((t,i)=>`<div class="row"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><div class="grow"><b>${esc(t.title)}</b><small>${esc(t.detail)}</small></div><span class="badge ${t.done?'done':'pending'}">${t.done?'DONE':'PENDING'}</span><div class="actions"><button class="mini" onclick="editTask(${i})">✎</button><button class="mini del" onclick="del('tasks',${i})">×</button></div></div>`).join('')||'<div class="empty">Belum ada task.</div>';
-}
-function totalBudget(){return db.vendorPayments.reduce((a,x)=>a+Number(x.bill||0),0)+db.expenses.reduce((a,x)=>a+Number(x.amount||0),0)+db.lamaran.reduce((a,x)=>a+Number(x.price||0),0)+db.theday.reduce((a,x)=>a+Number(x.price||0),0)+db.after.reduce((a,x)=>a+Number(x.price||0),0)}
-function totalPaid(){return db.vendorPayments.reduce((a,x)=>a+Number(x.paid||0),0)}
-function calcProgress(){const t=db.tasks.length?db.tasks.filter(x=>x.done).length/db.tasks.length*100:0;return Math.round(t)}
-function toggleTask(i,v){db.tasks[i].done=v;save();renderHome()}
-function del(arr,i){if(!confirm('Hapus item ini?'))return;db[arr].splice(i,1);save('Item dihapus');renderAll()}
-function editTask(i){openModal('task',i)}
-
-function showPage(page){
- if(page==='home'){document.getElementById('app').classList.remove('hidden');pageContainer.classList.add('hidden');setNav('nHome');renderHome();window.scrollTo(0,0);return}
- document.getElementById('app').classList.add('hidden');pageContainer.classList.remove('hidden');setNav(page==='budget'?'nBudget':page==='timeline'?'nTimeline':page==='guests'?'nGuest':'nMore');pageContainer.innerHTML=pageHTML(page);window.scrollTo(0,0)
-}
-function setNav(id){document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.getElementById(id)?.classList.add('active')}
-function pageHTML(p){
- const head=(title,btn,fn)=>`<div class="section-head"><h2>${title}</h2>${btn?`<button onclick="${fn}">${btn}</button>`:''}</div>`;
- if(p==='budget')return `<section class="section">${head('Budget & Pembayaran Vendor','+ Vendor',"openModal('vendorPayment')")}<div class="kpi"><div class="box"><small>Total tagihan</small><b>${rup(totalBudget())}</b></div><div class="box"><small>Sudah dibayar</small><b>${rup(totalPaid())}</b></div><div class="box"><small>Sisa</small><b>${rup(Math.max(0,totalBudget()-totalPaid()))}</b></div></div></section><section class="section">${head('Rincian Pembayaran All Vendor','+ Pengeluaran',"openModal('expense')")}<div class="card">${db.vendorPayments.map((v,i)=>`<div class="row"><div class="grow"><b>${esc(v.name)}</b><small>Tagihan ${rup(v.bill)} · DP ${rup(v.dp)} · Cicil ${rup(v.installment)} · Pelunasan ${rup(v.paid)}</small></div><span class="badge ${v.status==='DONE'?'done':'pending'}">${esc(v.status)}</span><div class="actions"><button class="mini" onclick="openModal('vendorPayment',${i})">✎</button><button class="mini del" onclick="del('vendorPayments',${i})">×</button></div></div>`).join('')||'<div class="empty">Belum ada rincian vendor.</div>'}</div></section><section class="section">${head('Pengeluaran Setiap Bulan','+ Tambah',"openModal('expense')")}<div class="card">${db.expenses.map((x,i)=>`<div class="row"><div class="grow"><b>${esc(x.name)}</b><small>${esc(x.month)} · ${esc(x.pic||'-')} · ${esc(x.date||'-')}</small></div><b>${rup(x.amount)}</b><div class="actions"><button class="mini" onclick="openModal('expense',${i})">✎</button><button class="mini del" onclick="del('expenses',${i})">×</button></div></div>`).join('')||'<div class="empty">Belum ada pengeluaran.</div>'}</div></section>`;
- if(p==='savings')return `<section class="section">${head('Tabungan Setiap Bulan','+ Bulan',"openModal('saving')")}<div class="card"><div class="table-wrap"><table class="table"><tr><th>Bulan</th><th>Galang</th><th>Niram</th><th>Status</th><th>Aksi</th></tr>${db.savings.map((x,i)=>`<tr><td>${esc(x.month)}</td><td>${rup(x.gal)}</td><td>${rup(x.niram)}</td><td><span class="badge ${x.status==='DONE'?'done':'pending'}">${x.status}</span></td><td><button class="mini" onclick="openModal('saving',${i})">✎</button><button class="mini del" onclick="del('savings',${i})">×</button></td></tr>`).join('')}</table></div></div></section><section class="section"><div class="card"><div class="kpi"><div class="box"><small>Galang</small><b>${rup(db.savings.reduce((a,x)=>a+Number(x.gal||0),0))}</b></div><div class="box"><small>Niram</small><b>${rup(db.savings.reduce((a,x)=>a+Number(x.niram||0),0))}</b></div><div class="box"><small>Total</small><b>${rup(db.savings.reduce((a,x)=>a+Number(x.gal||0)+Number(x.niram||0),0))}</b></div></div></div></section>`;
- if(p==='timeline')return `<section class="section">${head('Wedding Planning Timeline','+ Tahap',"openModal('timeline')")}<div class="card">${db.timeline.map((x,i)=>`<div class="row"><div class="grow"><span class="badge pending">${esc(x.month)}</span><b style="display:block;margin-top:5px">${esc(x.title)}</b><small>${esc(x.detail)}</small></div><div class="actions"><button class="mini" onclick="openModal('timeline',${i})">✎</button><button class="mini del" onclick="del('timeline',${i})">×</button></div></div>`).join('')}</div></section>`;
- if(p==='guests')return `<section class="section">${head('Tamu Lamaran','+ Tamu',"openModal('guest')")}<div class="kpi"><div class="box"><small>Total Tamu</small><b>${db.guests.reduce((a,x)=>a+Number(x.qty||0),0)}</b></div><div class="box"><small>IAM</small><b>${db.guests.filter(x=>x.side==='IAM').reduce((a,x)=>a+Number(x.qty||0),0)}</b></div><div class="box"><small>ABANG</small><b>${db.guests.filter(x=>x.side==='ABANG').reduce((a,x)=>a+Number(x.qty||0),0)}</b></div></div></section><section class="section"><div class="card">${db.guests.map((x,i)=>`<div class="row"><div class="grow"><b>${esc(x.category)} · ${esc(x.side)}</b><small>${esc(x.name)}</small></div><strong>${x.qty}</strong><div class="actions"><button class="mini" onclick="openModal('guest',${i})">✎</button><button class="mini del" onclick="del('guests',${i})">×</button></div></div>`).join('')}</div></section>`;
- if(p==='lamaran')return `<section class="section">${head('Lamaran — 20 Mei 2027','+ Item',"openModal('lamaran')")}<div class="card">${db.lamaran.map((x,i)=>`<div class="row"><div class="grow"><span class="badge pending">${esc(x.category)}</span><b style="display:block;margin-top:5px">${esc(x.item)}</b><small>Qty ${x.qty} · ${rup(x.price)}</small></div><span class="badge ${x.status==='Done'?'done':'pending'}">${esc(x.status)}</span><div class="actions"><button class="mini" onclick="openModal('lamaran',${i})">✎</button><button class="mini del" onclick="del('lamaran',${i})">×</button></div></div>`).join('')}</div></section>`;
- if(p==='seserahan')return `<section class="section">${head('List Seserahan','+ Item',"openModal('seserahan')")}<div class="card">${db.seserahan.map((x,i)=>`<div class="row"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleSes(${i},this.checked)"><div class="grow"><b>${esc(x.item)}</b><small>${esc(x.group)} · Est. ${rup(x.estimate)} · Final ${rup(x.final)}${x.store?' · '+esc(x.store):''}</small>${x.link?`<small><a href="${esc(x.link)}" target="_blank">Link toko</a></small>`:''}${x.note?`<small>${esc(x.note)}</small>`:''}</div><div class="actions"><button class="mini" onclick="openModal('seserahan',${i})">✎</button><button class="mini del" onclick="del('seserahan',${i})">×</button></div></div>`).join('')}</div></section><section class="section">${head('Cicil Seserahan','+ Cicilan',"openModal('cicil')")}<div class="card">${db.cicil.map((x,i)=>`<div class="row"><div class="grow"><b>${esc(x.month)} — ${esc(x.item)}</b><small>Budget ${rup(x.budget)} · Terpakai ${rup(x.paid)} · Sisa ${rup(Math.max(0,x.budget-x.paid))}</small></div><div class="actions"><button class="mini" onclick="openModal('cicil',${i})">✎</button><button class="mini del" onclick="del('cicil',${i})">×</button></div></div>`).join('')}</div></section>`;
- if(p==='theday')return `<section class="section">${head('The Day — Akad','+ Item',"openModal('theday')")}<div class="card">${db.theday.map((x,i)=>`<div class="row"><div class="grow"><span class="badge pending">${esc(x.section)}</span><b style="display:block;margin-top:5px">${esc(x.name)}</b><small>${rup(x.price)} · ${esc(x.store||'Belum diisi')}</small></div><div class="actions"><button class="mini" onclick="openModal('theday',${i})">✎</button><button class="mini del" onclick="del('theday',${i})">×</button></div></div>`).join('')}</div></section><section class="section">${head('After Wedding','+ Item',"openModal('after')")}<div class="card">${db.after.map((x,i)=>`<div class="row"><div class="grow"><b>${esc(x.name)}</b><small>${rup(x.price)}</small></div><div class="actions"><button class="mini" onclick="openModal('after',${i})">✎</button><button class="mini del" onclick="del('after',${i})">×</button></div></div>`).join('')}</div></section><section class="section">${head('Prewedding / KUA & Mahar','','')}<div class="card">${db.prewedding.mahar.map((x,i)=>`<div class="row"><div class="grow"><b>${esc(x.name)}</b><small>${rup(x.price)} · ${esc(x.status)}</small></div><div class="actions"><button class="mini" onclick="openModal('mahar',${i})">✎</button><button class="mini del" onclick="del('mahar',${i})">×</button></div></div>`).join('')}</div></section>`;
- if(p==='vendors')return `<section class="section">${head('Vendor Contact List — Utama','+ Vendor',"openModal('contact',null,'main')")}<div class="card">${db.contacts.main.map((name,i)=>contactRow(name,i,'main')).join('')}</div></section><section class="section">${head('Vendor Contact List — Cadangan','+ Vendor',"openModal('contact',null,'backup')")}<div class="card">${db.contacts.backup.map((name,i)=>contactRow(name,i,'backup')).join('')}</div></section>`;
- return '';
-}
-function contactRow(name,i,type){const c=typeof name==='string'?{name,company:'',pic:'',phone:'',link:''}:name;return `<div class="row"><div class="grow"><b>${esc(c.name)}</b><small>${esc(c.company||'-')} · PIC ${esc(c.pic||'-')} · ${esc(c.phone||'-')}</small>${c.link?`<small><a href="${esc(c.link)}" target="_blank">Social/Link</a></small>`:''}</div><div class="actions"><button class="mini" onclick="openModal('contact',${i},'${type}')">✎</button><button class="mini del" onclick="delContact('${type}',${i})">×</button></div></div>`}
-function delContact(type,i){if(!confirm('Hapus vendor kontak ini?'))return;db.contacts[type].splice(i,1);save('Vendor dihapus');showPage('vendors')}
-function toggleSes(i,v){db.seserahan[i].done=v;save();showPage('seserahan')}
-
-function openQuick(){document.getElementById('modalTitle').textContent='Tambah Cepat';document.getElementById('modalBody').innerHTML=`<button class="save" onclick="openModal('task')">☑️ Task</button><button class="outline" onclick="openModal('expense')">💸 Pengeluaran</button><button class="outline" onclick="openModal('vendorPayment')">🏢 Vendor</button><button class="outline" onclick="openModal('guest')">👥 Tamu</button><button class="outline" onclick="openModal('seserahan')">🎁 Seserahan</button>`;document.getElementById('modal').classList.add('show')}
-function openSettings(){openModal('settings')}
-function closeModal(){document.getElementById('modal').classList.remove('show')}
-function field(label,name,value='',type='text',extra=''){return `<div class="fg"><label>${label}</label><input id="f_${name}" type="${type}" value="${esc(value)}" ${extra}></div>`}
-function num(v){return Number(v||0)}
-function openModal(type,index=null,extra=null){
- document.getElementById('modal').classList.add('show');let title='Tambah';let body='';
- if(type==='settings'){title='Pengaturan Wedding';body=field('Nama pasangan','couple',db.settings.couple)+field('Tanggal pernikahan','date',db.settings.date,'date')+`<button class="save" onclick="saveSettings()">Simpan</button><button class="outline" onclick="resetData()">Reset semua data</button>`}
- else if(type==='task'){title=index==null?'Tambah Task':'Edit Task';const x=index==null?{title:'',detail:'',done:false}:db.tasks[index];body=field('Nama task','title',x.title)+field('Detail','detail',x.detail)+`<div class="fg"><label>Status</label><select id="f_done"><option value="false" ${!x.done?'selected':''}>PENDING</option><option value="true" ${x.done?'selected':''}>DONE</option></select></div><button class="save" onclick="saveTask(${index??'null'})">Simpan</button>`}
- else if(type==='saving'){title=index==null?'Tambah Bulan':'Edit Tabungan';const x=index==null?{month:'',gal:0,niram:0,status:'NOT YET'}:db.savings[index];body=field('Bulan','month',x.month)+`<div class="two">${field('Tabungan Galang','gal',x.gal,'number')}${field('Tabungan Niram','niram',x.niram,'number')}</div><div class="fg"><label>Status</label><select id="f_status"><option>NOT YET</option><option ${x.status==='DONE'?'selected':''}>DONE</option></select></div><button class="save" onclick="saveSaving(${index??'null'})">Simpan</button>`}
- else if(type==='expense'){title=index==null?'Tambah Pengeluaran':'Edit Pengeluaran';const x=index==null?{month:'Januari',name:'',amount:0,pic:'',date:''}:db.expenses[index];body=`<div class="two">${field('Bulan','month',x.month)}${field('Tanggal','date',x.date,'date')}</div>${field('Nama pengeluaran','name',x.name)}<div class="two">${field('Nominal','amount',x.amount,'number')}${field('PIC','pic',x.pic)}</div><button class="save" onclick="saveExpense(${index??'null'})">Simpan</button>`}
- else if(type==='vendorPayment'){title=index==null?'Tambah Vendor':'Edit Pembayaran Vendor';const x=index==null?{name:'',bill:0,dp:0,installment:0,paid:0,status:'NOT YET'}:db.vendorPayments[index];body=field('Nama vendor','name',x.name)+`<div class="two">${field('Tagihan (Awal)','bill',x.bill,'number')}${field('DP/Lunas','dp',x.dp,'number')}</div><div class="two">${field('Cicil','installment',x.installment,'number')}${field('Pelunasan','paid',x.paid,'number')}</div><div class="fg"><label>Status</label><select id="f_status"><option>NOT YET</option><option ${x.status==='DONE'?'selected':''}>DONE</option></select></div><button class="save" onclick="saveVendorPayment(${index??'null'})">Simpan</button>`}
- else if(type==='timeline'){title=index==null?'Tambah Timeline':'Edit Timeline';const x=index==null?{month:'',title:'',detail:''}:db.timeline[index];body=field('Bulan / Months before','month',x.month)+field('Kegiatan','title',x.title)+`<div class="fg"><label>Detail</label><textarea id="f_detail">${esc(x.detail)}</textarea></div><button class="save" onclick="saveTimeline(${index??'null'})">Simpan</button>`}
- else if(type==='guest'){title=index==null?'Tambah Tamu':'Edit Tamu';const x=index==null?{side:'IAM',category:'',name:'',qty:1}:db.guests[index];body=`<div class="two"><div class="fg"><label>Pihak</label><select id="f_side"><option ${x.side==='IAM'?'selected':''}>IAM</option><option ${x.side==='ABANG'?'selected':''}>ABANG</option></select></div>${field('Kategori','category',x.category)}</div>${field('Nama / List','name',x.name)}${field('Jumlah','qty',x.qty,'number')}<button class="save" onclick="saveGuest(${index??'null'})">Simpan</button>`}
- else if(type==='lamaran'){title=index==null?'Tambah Item Lamaran':'Edit Item Lamaran';const x=index==null?{category:'',item:'',qty:1,price:0,status:'Progress'}:db.lamaran[index];body=field('Kategori','category',x.category)+field('Nama item','item',x.item)+`<div class="two">${field('Qty','qty',x.qty,'number')}${field('Harga / Final Price','price',x.price,'number')}</div><div class="fg"><label>Status</label><select id="f_status"><option ${x.status==='Progress'?'selected':''}>Progress</option><option ${x.status==='Done'?'selected':''}>Done</option></select></div><button class="save" onclick="saveLamaran(${index??'null'})">Simpan</button>`}
- else if(type==='seserahan'){title=index==null?'Tambah Seserahan':'Edit Seserahan';const x=index==null?{group:'',item:'',done:false,estimate:0,final:0,store:'',link:'',note:''}:db.seserahan[index];body=field('Kategori','group',x.group)+field('Nama item','item',x.item)+`<div class="two">${field('Harga estimasi','estimate',x.estimate,'number')}${field('Final price','final',x.final,'number')}</div>${field('Nama store','store',x.store)}${field('Link','link',x.link,'url')}${field('Keterangan','note',x.note)}<button class="save" onclick="saveSeserahan(${index??'null'})">Simpan</button>`}
- else if(type==='cicil'){title=index==null?'Tambah Cicilan':'Edit Cicilan';const x=index==null?{month:'',item:'',budget:0,paid:0}:db.cicil[index];body=field('Bulan','month',x.month)+field('Item','item',x.item)+`<div class="two">${field('Budget per bulan','budget',x.budget,'number')}${field('Budget terpakai','paid',x.paid,'number')}</div><button class="save" onclick="saveCicil(${index??'null'})">Simpan</button>`}
- else if(type==='theday'){title=index==null?'Tambah The Day':'Edit The Day';const x=index==null?{section:'AKAD',name:'',price:0,store:''}:db.theday[index];body=`<div class="fg"><label>Bagian</label><select id="f_section"><option>AKAD</option><option>RESEPSI</option></select></div>${field('Nama item','name',x.name)}${field('Harga','price',x.price,'number')}${field('Store / Brand / PIC','store',x.store)}<button class="save" onclick="saveTheday(${index??'null'})">Simpan</button>`}
- else if(type==='after'){title=index==null?'Tambah After Wedding':'Edit After Wedding';const x=index==null?{name:'',price:0}:db.after[index];body=field('Nama item','name',x.name)+field('Harga','price',x.price,'number')+`<button class="save" onclick="saveAfter(${index??'null'})">Simpan</button>`}
- else if(type==='mahar'){title='Edit Mahar';const x=db.prewedding.mahar[index];body=field('Nama item','name',x.name)+field('Harga','price',x.price,'number')+`<div class="fg"><label>Status</label><select id="f_status"><option>NOT YET</option><option ${x.status==='DONE'?'selected':''}>DONE</option></select></div><button class="save" onclick="saveMahar(${index})">Simpan</button>`}
- else if(type==='contact'){title=index==null?'Tambah Vendor Kontak':'Edit Vendor Kontak';const arr=db.contacts[extra||'main'];const raw=index==null?{name:'',company:'',pic:'',phone:'',link:''}:arr[index];const x=typeof raw==='string'?{name:raw,company:'',pic:'',phone:'',link:''}:raw;body=field('Nama vendor','name',x.name)+field('Company','company',x.company)+`<div class="two">${field('PIC','pic',x.pic)}${field('No. Telepon','phone',x.phone,'tel')}</div>${field('Social Media / Link','link',x.link,'url')}<button class="save" onclick="saveContact(${index??'null'},'${extra||'main'}')">Simpan</button>`}
- document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;
-}
-function v(n){return document.getElementById('f_'+n)?.value??''}
-function saveSettings(){db.settings={couple:v('couple'),date:v('date')};save();closeModal();renderHome()}
-function saveTask(i){const x={title:v('title'),detail:v('detail'),done:v('done')==='true'};if(i===null)db.tasks.push(x);else db.tasks[i]=x;save();closeModal();renderAll()}
-function saveSaving(i){const x={month:v('month'),gal:num(v('gal')),niram:num(v('niram')),status:v('status')};if(i===null)db.savings.push(x);else db.savings[i]=x;save();closeModal();renderAll()}
-function saveExpense(i){const x={month:v('month'),name:v('name'),amount:num(v('amount')),pic:v('pic'),date:v('date')};if(i===null)db.expenses.push(x);else db.expenses[i]=x;save();closeModal();renderAll()}
-function saveVendorPayment(i){const x={name:v('name'),bill:num(v('bill')),dp:num(v('dp')),installment:num(v('installment')),paid:num(v('paid')),status:v('status')};if(i===null)db.vendorPayments.push(x);else db.vendorPayments[i]=x;save();closeModal();renderAll()}
-function saveTimeline(i){const x={month:v('month'),title:v('title'),detail:v('detail')};if(i===null)db.timeline.push(x);else db.timeline[i]=x;save();closeModal();renderAll()}
-function saveGuest(i){const x={side:v('side'),category:v('category'),name:v('name'),qty:num(v('qty'))};if(i===null)db.guests.push(x);else db.guests[i]=x;save();closeModal();renderAll()}
-function saveLamaran(i){const x={category:v('category'),item:v('item'),qty:num(v('qty')),price:num(v('price')),status:v('status')};if(i===null)db.lamaran.push(x);else db.lamaran[i]=x;save();closeModal();renderAll()}
-function saveSeserahan(i){const old=i===null?{}:db.seserahan[i];const x={group:v('group'),item:v('item'),done:old.done||false,estimate:num(v('estimate')),final:num(v('final')),store:v('store'),link:v('link'),note:v('note')};if(i===null)db.seserahan.push(x);else db.seserahan[i]=x;save();closeModal();renderAll()}
-function saveCicil(i){const x={month:v('month'),item:v('item'),budget:num(v('budget')),paid:num(v('paid'))};if(i===null)db.cicil.push(x);else db.cicil[i]=x;save();closeModal();renderAll()}
-function saveTheday(i){const x={section:v('section'),name:v('name'),price:num(v('price')),store:v('store')};if(i===null)db.theday.push(x);else db.theday[i]=x;save();closeModal();renderAll()}
-function saveAfter(i){const x={name:v('name'),price:num(v('price'))};if(i===null)db.after.push(x);else db.after[i]=x;save();closeModal();renderAll()}
-function saveMahar(i){db.prewedding.mahar[i]={...db.prewedding.mahar[i],name:v('name'),price:num(v('price')),status:v('status')};save();closeModal();renderAll()}
-function saveContact(i,type){const x={name:v('name'),company:v('company'),pic:v('pic'),phone:v('phone'),link:v('link')};if(i===null)db.contacts[type].push(x);else db.contacts[type][i]=x;save();closeModal();renderAll()}
-
-function resetData(){if(!confirm('Reset semua data ke data referensi? Data editan akan hilang.'))return;db=clone(defaultData);save('Data dikembalikan ke referensi');closeModal();renderAll()}
-function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Wedding_Planner_Backup.json';a.click();URL.revokeObjectURL(a.href)}
-function renderAll(){renderHome();const active=document.querySelector('.nav button.active');if(!document.getElementById('pageContainer').classList.contains('hidden')){const p=active?.id==='nBudget'?'budget':active?.id==='nTimeline'?'timeline':active?.id==='nGuest'?'guests':null;if(p)showPage(p)}}
-document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-function countdown(){const target=new Date(db.settings.date+'T00:00:00').getTime(),now=Date.now(),d=Math.max(0,target-now);cdD.textContent=Math.floor(d/86400000);cdH.textContent=Math.floor(d/3600000)%24;cdM.textContent=Math.floor(d/60000)%60;cdS.textContent=Math.floor(d/1000)%60}
-renderHome();countdown();setInterval(countdown,1000);
-</script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
-}
-</script>
-
-</body>
-</html>
+  {group:'Tas, Sepatu, Jam Tangan',item:'Tas',done:false,estimate:0,final:0,store:'
